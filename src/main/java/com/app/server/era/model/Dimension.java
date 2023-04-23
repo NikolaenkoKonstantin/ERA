@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @ToString
-@EqualsAndHashCode
+//@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -18,6 +18,11 @@ public class Dimension {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "id_patient", referencedColumnName = "id")
+    private Patient owner;
 
     @Column(name = "elbow_knee")
     private int elbowKnee;
