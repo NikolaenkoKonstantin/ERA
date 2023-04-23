@@ -11,13 +11,16 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity()
-@Table(name = "elbow")
-public class Elbow {
+@Entity
+@Table(name = "dimension")
+public class Dimension {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "elbow_knee")
+    private int elbowKnee;
 
     @Column(name = "left_right")
     private int leftRight;
@@ -36,6 +39,9 @@ public class Elbow {
 
     @Column(name = "state")
     private int state;
+
+    @Column(name = "distance")
+    private Integer distance;
 
     @Column(name = "date_time")
     private LocalDateTime dateTime;
