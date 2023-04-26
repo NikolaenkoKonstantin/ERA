@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DimensionDTO {
-    @Pattern(regexp = "\\d{10,15}", message = "between 10 and 15 digits")
+    @Pattern(regexp = "\\d{6}", message = "6 digits")
     private String cardNumber;
 
     @Min(value = 0, message = "the elbow or leg field must contain either 0 or 1")
@@ -36,8 +36,8 @@ public class DimensionDTO {
     @NotNull(message = "the dizziness field can contain either true or false")
     private boolean dizziness;
 
-    @Min(value = 0, message = "the state field must contain either 0 or 1")
-    @Max(value = 1, message = "the state field must contain either 0 or 1")
+    @Min(value = 1, message = "the state field must contain either 1 or 5")
+    @Max(value = 5, message = "the state field must contain either 1 or 5")
     private int state;
 
     @Positive(message = "distance field cannot be negative")

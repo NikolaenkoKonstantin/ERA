@@ -3,6 +3,8 @@ package com.app.server.era.restController;
 import com.app.server.era.DTO.DimensionDTO;
 import com.app.server.era.Exception.DimensionDTOBadRequestException;
 import com.app.server.era.Exception.DimensionDTOErrorResponse;
+import com.app.server.era.Exception.PatientDoesNotExistError;
+import com.app.server.era.Exception.PatientDoesNotExistException;
 import com.app.server.era.service.DimensionService;
 import com.app.server.era.util.Converter;
 import com.app.server.era.util.HandlerException;
@@ -36,6 +38,11 @@ public class DimensionRestController {
 
     @ExceptionHandler
     private ResponseEntity<DimensionDTOErrorResponse> handleException(DimensionDTOBadRequestException ex){
+        return new HandlerException().handleException(ex);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<PatientDoesNotExistError> handleException(PatientDoesNotExistException ex){
         return new HandlerException().handleException(ex);
     }
 
