@@ -48,6 +48,9 @@ public class Dimension {
     @Column(name = "distance")
     private Integer distance;
 
+    @Column(name = "status")
+    private int status;
+
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 }

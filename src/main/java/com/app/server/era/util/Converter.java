@@ -1,7 +1,10 @@
 package com.app.server.era.util;
 
 import com.app.server.era.DTO.DimensionDTO;
+import com.app.server.era.DTO.LoginRequestUserDTO;
+import com.app.server.era.DTO.LoginResponseUserDTO;
 import com.app.server.era.model.Dimension;
+import com.app.server.era.model.User;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -13,5 +16,13 @@ public class Converter {
 
     public Dimension convertToDimension(DimensionDTO dto){
         return modelMapper.map(dto, Dimension.class);
+    }
+
+    public User convertToUser(LoginRequestUserDTO dto){
+        return modelMapper.map(dto, User.class);
+    }
+
+    public LoginResponseUserDTO convertToLoginResponseUserDTO(User user){
+        return modelMapper.map(user, LoginResponseUserDTO.class);
     }
 }

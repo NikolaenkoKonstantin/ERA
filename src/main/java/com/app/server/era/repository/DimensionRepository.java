@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DimensionRepository extends JpaRepository<Dimension, Integer> {
-    Dimension findFirstByOwnerOrderByDateTimeDesc(Patient patient);
+    Dimension findFirstByOwnerAndElbowKneeOrderByDateTimeDesc(Patient p, int eK);
+    //для закрытия реабилитации пациента врачом (такому то пациенту по правой ноге закрыть лечение)
+    Dimension findFirstByOwnerAndElbowKneeAndLeftRightOrderByDateTimeDesc(Patient p, int eK, int lR);
 }

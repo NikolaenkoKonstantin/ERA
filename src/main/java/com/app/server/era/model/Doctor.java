@@ -12,16 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "patient")
-public class Patient {
+@Table(name = "doctor")
+public class Doctor {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "owner")
-    private List<Dimension> dimensions;
 
     @ToString.Exclude
     @OneToOne
@@ -36,10 +32,4 @@ public class Patient {
 
     @Column(name = "surname")
     private String surName;
-
-    @Column(name = "age")
-    private int age;
-
-    @Column(name = "card_number")
-    private String cardNumber;
 }
