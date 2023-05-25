@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
+//Представление уведомлений врача
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/doctor/notification", layout = EraLayout.class)
 @PageTitle("Notification | ERA CRM")
@@ -30,6 +31,7 @@ public class NotificationsView extends VerticalLayout {
     Grid<NotificationResponseDTO> grid = new Grid<>(NotificationResponseDTO.class);
 
 
+    //Конструктор
     @Autowired
     public NotificationsView(Converter converter, DoctorService doctorService){
         this.converter = converter;
@@ -44,6 +46,7 @@ public class NotificationsView extends VerticalLayout {
     }
 
 
+    //Конфигурация сетки
     private void configureGrid() {
         configureColumns();
 
@@ -56,6 +59,7 @@ public class NotificationsView extends VerticalLayout {
     }
 
 
+    //Удаление уведомления
     private void deleteNotification(NotificationResponseDTO dto){
         //возможно нужно сделать удаление всё таки в другом месте TODO
         doctorService.deleteNotification(dto.getId());
@@ -63,6 +67,7 @@ public class NotificationsView extends VerticalLayout {
     }
 
 
+    //Конфигурация колонок сетки
     private void configureColumns() {
         grid.removeAllColumns();
         grid.addColumn(NotificationResponseDTO::getCardNumber).setHeader("Номер карты");
@@ -72,6 +77,7 @@ public class NotificationsView extends VerticalLayout {
     }
 
 
+    //Загрузка данных сетки
     private List<NotificationResponseDTO> loadGrid() {
         User userDoctor = ((UserDetailsImpl) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getUser();
@@ -83,11 +89,12 @@ public class NotificationsView extends VerticalLayout {
     }
 
 
+    //Переход на страницу пациента
     private void navigateToPatient(NotificationResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class,
                 converter.convertToResponsePatientDTO(
                         doctorService.findPatientByCardNumber(dto.getCardNumber())));
 
-        getUI().get().navigate("/doctor/patient");
+        getUI().get().navigate(PatientView.class);
     }
 }

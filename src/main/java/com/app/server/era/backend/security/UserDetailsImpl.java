@@ -14,18 +14,21 @@ public class UserDetailsImpl implements UserDetails {
     private final User user;
 
 
+    //Получить роли
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
     }
 
 
+    //Получить пароль
     @Override
     public String getPassword() {
         return user.getPassword();
     }
 
 
+    //Получить имя (логин)
     @Override
     public String getUsername() {
         return user.getLogin();
@@ -56,6 +59,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
 
+    //Получить юзера
     public User getUser(){
         return user;
     }

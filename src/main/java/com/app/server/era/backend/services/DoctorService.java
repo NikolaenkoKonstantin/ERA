@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,10 +32,10 @@ public class DoctorService {
                 owner, elbowKnee, leftRight, "healthy");
 
         if(dimension != null) {
-            return dimRepo.findAllByOwnerAndElbowKneeAndLeftRightAndDateTimeAfter(
+            return dimRepo.findAllByOwnerAndElbowKneeAndLeftRightAndDateTimeAfterOrderByDateTime(
                     owner, elbowKnee, leftRight, dimension.getDateTime());
         } else {
-            return dimRepo.findAllByOwnerAndElbowKneeAndLeftRight(owner, elbowKnee, leftRight);
+            return dimRepo.findAllByOwnerAndElbowKneeAndLeftRightOrderByDateTime(owner, elbowKnee, leftRight);
         }
     }
 
@@ -48,8 +47,8 @@ public class DoctorService {
 
         Dimension dimension = dimRepo.findFirstByOwnerAndElbowKneeAndLeftRightOrderByDateTimeDesc(
                 patient,
-                c.getElbowKnee().equalsIgnoreCase("локоть") ? "elbow" : "knee",
-                c.getLeftRight().equalsIgnoreCase("лево") ? "left" : "right");
+                c.getElbowKnee().equalsIgnoreCase("Локтевой") ? "elbow" : "knee",
+                c.getLeftRight().equalsIgnoreCase("Левая") ? "left" : "right");
 
         dimension.setStatus("healthy");
         dimRepo.save(dimension);

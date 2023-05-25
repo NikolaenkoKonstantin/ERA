@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import jakarta.annotation.security.RolesAllowed;
 
+//Класс-представление добавить нового пациента
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/doctor/create", layout = EraLayout.class)
 @PageTitle("Create patient | ERA CRM")
@@ -17,6 +18,7 @@ public class PatientCreateView extends VerticalLayout {
     PatientCreateForm form;
 
 
+    //Конструктор
     public PatientCreateView(){
         addClassName("patientCreate-view");
 
@@ -26,6 +28,7 @@ public class PatientCreateView extends VerticalLayout {
     }
 
 
+    //Конфигурация формы
     private void configureForm() {
         form = new PatientCreateForm();
 
@@ -35,16 +38,21 @@ public class PatientCreateView extends VerticalLayout {
     }
 
 
+    //Переход на представление пациентов
     private void navigateToPatients() {
         form.setBinder(null);
         getUI().get().navigate("/doctor/patients");
     }
 
 
-    private void navigateToEmailConfirmation(PatientCreateForm.SaveEvent event){
-        PatientRequestCreateDTO dto = event.getRequestPatientDTO();
+    //Переход на представление подтверждения почты
+    private void navigateToEmailConfirmation(
+            PatientCreateForm.SaveEvent event){
+        PatientRequestCreateDTO dto =
+                event.getRequestPatientDTO();
 
-        ComponentUtil.setData(UI.getCurrent(), PatientRequestCreateDTO.class, dto);
+        ComponentUtil.setData(UI.getCurrent(),
+                PatientRequestCreateDTO.class, dto);
         getUI().get().navigate(EmailConfirmationView.class);
     }
 }

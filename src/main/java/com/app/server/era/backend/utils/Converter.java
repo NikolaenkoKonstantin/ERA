@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+//Преобразователь из одного объекта в другой
 @Component
 @RequiredArgsConstructor
 public class Converter {
@@ -100,19 +101,22 @@ public class Converter {
     }
 
 
+    public ScheduleRequest convertToScheduleRequest(DimensionResponseDTO dto){
+        return new ScheduleRequest(
+                dto.getElbowKnee().equals("Локтевой") ? "elbow" : "knee",
+                dto.getLeftRight().equals("Левая") ? "left" : "right"
+        );
+    }
+
+
     public DimensionResponseDTO convertToResponseDimensionDTO(Dimension dimension){
         DimensionResponseDTO dto =  modelMapper.map(dimension, DimensionResponseDTO.class);
 
-        dto.setDizziness(dimension.isDizziness() ? "да" : "нет");
         dto.setDistance(dimension.getDistance() == null ? "Отсутствует" : ("" + dimension.getDistance()));
-        dto.setStatus(dimension.getStatus().equals("healthy") ? "здоров" : "реабилитация");
-        dto.setElbowKnee(dimension.getElbowKnee().equals("elbow") ? "локоть" : "нога");
+        dto.setStatus(dimension.getStatus().equals("healthy") ? "Здоров" : "Реабилитация");
+        dto.setElbowKnee(dimension.getElbowKnee().equals("elbow") ? "Локтевой" : "Коленный");
+        dto.setLeftRight(dimension.getLeftRight().equals("right") ? "Правая" : "Левая");
 
-        if(dimension.getLeftRight().equals("left")){
-            dto.setLeftRight(dimension.getElbowKnee().equals("elbow") ? "левый" : "левое");
-        }else {
-            dto.setLeftRight(dimension.getElbowKnee().equals("elbow") ? "правый" : "левый");
-        }
         return dto;
     }
 

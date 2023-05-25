@@ -17,8 +17,8 @@ public interface DimensionRepository extends JpaRepository<Dimension, Integer> {
     Dimension findFirstByOwnerAndElbowKneeAndLeftRightAndStatusOrderByDateTimeDesc(
             Patient owner, String elbowKnee, String leftRight, String status);
 
-    List<Dimension> findAllByOwnerAndElbowKneeAndLeftRight(Patient owner, String elbowKnee, String leftRight);
+    List<Dimension> findAllByOwnerAndElbowKneeAndLeftRightOrderByDateTime(Patient owner, String elbowKnee, String leftRight);
 
-    List<Dimension> findAllByOwnerAndElbowKneeAndLeftRightAndDateTimeAfter(
+    List<Dimension> findAllByOwnerAndElbowKneeAndLeftRightAndDateTimeAfterOrderByDateTime(
             Patient owner, String elbowKnee, String leftRight, LocalDateTime dateTime);
 }

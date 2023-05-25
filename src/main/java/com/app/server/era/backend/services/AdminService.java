@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+//Сервис администратора
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,12 +31,6 @@ public class AdminService {
         } else {
             return doctorRepo.search(stringFilter);
         }
-    }
-
-
-    //Получение доктора по id
-    public Doctor findDoctorById(int id){
-        return doctorRepo.findById(id).get();
     }
 
 

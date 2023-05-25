@@ -1,7 +1,7 @@
 package com.app.server.era.backend.services;
 
 import com.app.server.era.backend.dto.UserLoginRequestDTO;
-import com.app.server.era.backend.exceptions.AuthorizedBadRequestException;
+import com.app.server.era.backend.exceptions.AuthenticationBadRequestException;
 import com.app.server.era.backend.exceptions.PatientDoesNotExistException;
 import com.app.server.era.backend.models.*;
 import com.app.server.era.backend.repositories.*;
@@ -28,7 +28,7 @@ public class AndroidService {
         User user = userRepo.findByLogin(requestUserDTO.getLogin()).get();
 
         if(!passwordEncoder.matches(requestUserDTO.getPassword(), user.getPassword())){
-            throw new AuthorizedBadRequestException("Wrong login or password");
+            throw new AuthenticationBadRequestException("Wrong login or password");
         }
 
         return user;

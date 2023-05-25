@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 
+//Представление создания врача
 @RolesAllowed("ROLE_ADMIN")
 @Route(value = "/admin/create", layout = EraLayout.class)
 @PageTitle("Create doctor | ERA CRM")
@@ -25,6 +26,7 @@ public class DoctorCreateView extends VerticalLayout {
     DoctorCreateForm form;
 
 
+    //Конструктор
     @Autowired
     public DoctorCreateView(RegistrationService regService, Converter converter, AdminService adminService) {
         this.regService = regService;
@@ -38,6 +40,7 @@ public class DoctorCreateView extends VerticalLayout {
     }
 
 
+    //Конфигурация формы
     private void configureForm() {
         form = new DoctorCreateForm();
 
@@ -47,12 +50,14 @@ public class DoctorCreateView extends VerticalLayout {
     }
 
 
+    //Переход на страницу докторов
     private void navigateToDoctors() {
         form.setBinder(null);
-        getUI().get().navigate("/admin/doctors");
+        getUI().get().navigate(DoctorsView.class);
     }
 
 
+    //Сохрание врача
     private void saveDoctor(DoctorCreateForm.SaveEvent event) {
         DoctorRequestCreateDTO dto = event.getDoctorRequestDTO();
 
@@ -61,8 +66,9 @@ public class DoctorCreateView extends VerticalLayout {
     }
 
 
+    //Переход на страницу врача
     private void navigateToDoctor(DoctorResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), DoctorResponseDTO.class, dto);
-        getUI().get().navigate("/admin/doctor");
+        getUI().get().navigate(DoctorView.class);
     }
 }

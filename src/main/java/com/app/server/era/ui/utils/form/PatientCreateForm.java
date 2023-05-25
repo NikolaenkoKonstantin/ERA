@@ -14,19 +14,21 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
+//Форма создания пациента
 public class PatientCreateForm extends FormLayout {
-    TextField lastName = new TextField("Lastname");
-    TextField firstName = new TextField("Firstname");
-    TextField surName = new TextField("Surname");
-    TextField age = new TextField("Age");
-    TextField cardNumber = new TextField("Card number");
-    TextField email = new TextField("email");
-    TextField password = new TextField("Password");
+    TextField lastName = new TextField("Фамилия");
+    TextField firstName = new TextField("Имя");
+    TextField surName = new TextField("Отчество");
+    TextField age = new TextField("Возраст");
+    TextField cardNumber = new TextField("Номер карты");
+    TextField email = new TextField("Электронная почта");
+    TextField password = new TextField("Пароль");
     Button save = new Button("Сохранить");
     Button close = new Button("Отмена");
     Binder<PatientRequestCreateDTO> binder = new BeanValidationBinder<>(PatientRequestCreateDTO.class);
 
 
+    //Конструктор
     public PatientCreateForm() {
         addClassName("patientCreate-form");
 
@@ -36,12 +38,14 @@ public class PatientCreateForm extends FormLayout {
     }
 
 
+    //Конфигурация валидатора
     private void configureBinder() {
         binder.bindInstanceFields(this);
         setBinder(new PatientRequestCreateDTO());
     }
 
 
+    //Конфигурация кнопок и создание компонента
     private Component createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -57,6 +61,7 @@ public class PatientCreateForm extends FormLayout {
     }
 
 
+    //Проверка валидации
     private void validateAndSave() {
         if(binder.isValid()) {
             fireEvent(new SaveEvent(this, binder.getBean()));
@@ -64,6 +69,7 @@ public class PatientCreateForm extends FormLayout {
     }
 
 
+    //Установка значения валидатору
     public void setBinder(PatientRequestCreateDTO dto) {
         binder.setBean(dto);
     }

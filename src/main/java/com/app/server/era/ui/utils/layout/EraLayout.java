@@ -21,10 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
+//Макет для представлений
 public class EraLayout extends AppLayout {
+    //Сервис безопасности
     private final SecurityService securityService;
 
 
+    //Конструктор с внедрением зависимости
     @Autowired
     public EraLayout(SecurityService securityService) {
         this.securityService = securityService;
@@ -32,43 +35,63 @@ public class EraLayout extends AppLayout {
         createDrawer();
     }
 
-
+    //Создание шапки макета
     private void createHeader() {
+        //Название макета
         H1 logo = new H1("ERA | Vaadin CRM");
+        //Настройка названия
         logo.addClassNames(
                 LumoUtility.FontSize.LARGE,
                 LumoUtility.Margin.MEDIUM);
 
-        Button logout = new Button("Log out", e -> securityService.logout());
+        //Добавить действие для кнопки выхода
+        Button logout = new Button("Log out",
+                e -> securityService.logout());
 
-        var header = new HorizontalLayout(new DrawerToggle(), logo, logout);
+        //Получение горизонтальной расстановки
+        var header = new HorizontalLayout(new DrawerToggle(),
+                logo, logout);
 
-        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        //Настройка шапки
+        header.setDefaultVerticalComponentAlignment(
+                FlexComponent.Alignment.CENTER);
         header.expand(logo);
         header.setWidthFull();
         header.addClassNames(
                 LumoUtility.Padding.Vertical.NONE,
                 LumoUtility.Padding.Horizontal.MEDIUM);
 
+        //Кладем шапку в Navbar
         addToNavbar(header);
-
     }
 
 
+    //Создание ящика со ссылками
     private void createDrawer() {
+        //Получение объекта принципал
+        // для определения роли пользователя
         User user = ((UserDetailsImpl) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal()).getUser();
+                .getContext().getAuthentication()
+                .getPrincipal()).getUser();
 
+        //Если доктор, то такие ссылки
         if(user.getRole().equals("ROLE_DOCTOR")) {
             addToDrawer(new VerticalLayout(
-                    new RouterLink("Пациенты", PatientsView.class),
-                    new RouterLink("Добавить пациента", PatientCreateView.class),
-                    new RouterLink("Уведомления", NotificationsView.class)
+                    new RouterLink("Пациенты",
+                            PatientsView.class),
+                    new RouterLink("Добавить пациента",
+                            PatientCreateView.class),
+                    new RouterLink("Уведомления",
+                            NotificationsView.class)
             ));
-        } else if(user.getRole().equals("ROLE_ADMIN")){
+        }
+        //Иначе если администратор то такие ссылки
+        else if(user.getRole().equals("ROLE_ADMIN")){
             addToDrawer(new VerticalLayout(
-                    new RouterLink("Доктора", DoctorsView.class),
-                    new RouterLink("Добавить доктора", DoctorCreateView.class)
+                    new RouterLink("Доктора",
+                            DoctorsView.class),
+                    new RouterLink("Добавить доктора",
+                            DoctorCreateView.class)
             ));
         }
     }

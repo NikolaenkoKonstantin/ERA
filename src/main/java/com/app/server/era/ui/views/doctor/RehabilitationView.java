@@ -1,10 +1,12 @@
 package com.app.server.era.ui.views.doctor;
 
 import com.app.server.era.backend.dto.PatientResponseDTO;
+import com.app.server.era.backend.dto.ScheduleRequest;
 import com.app.server.era.backend.models.Dimension;
 import com.app.server.era.backend.services.DoctorService;
 import com.app.server.era.ui.utils.layout.EraLayout;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.charts.model.*;
@@ -22,7 +24,7 @@ import java.util.List;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
-
+//Предсталение графиков реабилитации
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/doctor/rehabilitation", layout = EraLayout.class)
 @PageTitle("rehabilitation | ERA CRM")
@@ -30,50 +32,60 @@ public class RehabilitationView extends VerticalLayout {
     private final DoctorService doctorService;
     final Chart chartAngle = new Chart();
     Chart chartCountBendAndState = new Chart();
-    ComboBox<String> elbowKnee = new ComboBox<>("Сустав");
-    ComboBox<String> leftRight = new ComboBox<>("Ориентация");
-    Button search = new Button("Поиск");
+    Button close = new Button("Вернуться к пациенту");
 
+    //Данные графиков
     DataSeries dsFlexionAngle = new DataSeries();
     DataSeries dsExtensionAngle = new DataSeries();
     DataSeries dsCountBend = new DataSeries();
     DataSeries dsState = new DataSeries();
 
     List<Dimension> dtoCharts;
-    PatientResponseDTO dto;
+    PatientResponseDTO patDTO;
+    ScheduleRequest scheduleRequest;
 
 
+    //Конструктор
     @Autowired
     public RehabilitationView(DoctorService doctorService){
         this.doctorService = doctorService;
         addClassName("rehabilitation-view");
 
-        dto = ComponentUtil.getData(getCurrent(), PatientResponseDTO.class);
+        patDTO = ComponentUtil.getData(getCurrent(), PatientResponseDTO.class);
+        scheduleRequest = ComponentUtil.getData(getCurrent(), ScheduleRequest.class);
 
-        if(dto != null) {
-            configureComboBox();
+        System.out.println(patDTO);
+        System.out.println(scheduleRequest);
+
+        if(patDTO != null && scheduleRequest != null) {
             configureDataSeries();
             configureChartAngle();
             configureChartCountBendAndState();
             configureButton();
+            rebootCharts();
 
-            add(new H3("Реабилитация"), new HorizontalLayout(elbowKnee, leftRight, search),
-                    chartAngle, chartCountBendAndState);
+            add(close, new H3("Реабилитация"), chartAngle, chartCountBendAndState);
         }else{
             add(new H3("Не выбран пациент для отображения графика лечения"));
         }
     }
 
 
+    //Конфигурация кнопок
     private void configureButton(){
-        search.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        search.addClickListener(event -> {
-            if(!elbowKnee.isEmpty() && !leftRight.isEmpty()) {
-                rebootCharts();
-            }
-        });
+        close.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        close.addClickListener(event -> navigateToPatient());
     }
 
+
+    //Переход на страницу пациента
+    private void navigateToPatient() {
+        ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, patDTO);
+        getUI().get().navigate(PatientView.class);
+    }
+
+
+    //Обновить графики
     private void rebootCharts() {
         loadChart();
         if(!dtoCharts.isEmpty()) {
@@ -91,6 +103,7 @@ public class RehabilitationView extends VerticalLayout {
     }
 
 
+    //Задать значения данными графиков
     private void updateData(){
         Number[] numbersFlexionAngle = new Double[dtoCharts.size()];
         Number[] numbersExtensionAngle = new Double[dtoCharts.size()];
@@ -111,19 +124,15 @@ public class RehabilitationView extends VerticalLayout {
     }
 
 
-    private void configureComboBox(){
-        elbowKnee.setItems(List.of("Локоть", "Колено"));
-        leftRight.setItems(List.of("Лево", "Право"));
-    }
-
-
+    //Загрузка данных для графиков
     private void loadChart() {
-        dtoCharts = doctorService.findAllForCharts(dto.getId(),
-                elbowKnee.getValue().equals("Локоть") ? "elbow" : "knee",
-                leftRight.getValue().equals("Лево") ? "left" : "right");
+        dtoCharts = doctorService.findAllForCharts(patDTO.getId(),
+                scheduleRequest.getElbowKnee(),
+                scheduleRequest.getLeftRight());
     }
 
 
+    //Конфигурация объекта Series
     private void configureDataSeries(){
         dsFlexionAngle.setName("Угол сгибания");
         dsExtensionAngle.setName("Угол разгибания");
@@ -132,6 +141,7 @@ public class RehabilitationView extends VerticalLayout {
     }
 
 
+    //Конфигурация второго графика (количества и боли)
     private void configureChartCountBendAndState() {
         Configuration configuration = chartCountBendAndState.getConfiguration();
 
@@ -145,6 +155,7 @@ public class RehabilitationView extends VerticalLayout {
     }
 
 
+    //Конфигурация первого графика (углов)
     public void configureChartAngle(){
         Configuration configuration = chartAngle.getConfiguration();
 
@@ -157,6 +168,7 @@ public class RehabilitationView extends VerticalLayout {
     }
 
 
+    //Общая конфигурация графиков
     private void configureLegend(Configuration configuration, String title, String titleY){
         configuration.setTitle(title);
         configuration.getyAxis().setTitle(titleY);
@@ -170,5 +182,4 @@ public class RehabilitationView extends VerticalLayout {
         plotOptionsSeries.setPointStart(1);
         configuration.setPlotOptions(plotOptionsSeries);
     }
-
 }

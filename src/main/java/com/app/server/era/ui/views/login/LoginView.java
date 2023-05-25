@@ -8,12 +8,14 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+//Представление входа в приложение
 @Route("/login")
 @PageTitle("Login | ERA CRM")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     private final LoginForm login = new LoginForm();
 
 
+    //Конструктор
     public LoginView(){
         addClassName("login-view");
         setSizeFull();
@@ -22,10 +24,11 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
         login.setAction("login");
 
-        add(new H1("Vaadin CRM"), login);
+        add(new H1("ERA CRM"), login);
     }
 
 
+    //Конфигурация
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         if(beforeEnterEvent.getLocation()

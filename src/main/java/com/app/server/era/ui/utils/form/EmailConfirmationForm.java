@@ -13,6 +13,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
+//Форма подтверждения почты
 public class EmailConfirmationForm extends FormLayout {
     TextField code = new TextField("Код");
     Binder<EmailCodeRequest> binder = new Binder<>(EmailCodeRequest.class);
@@ -20,6 +21,7 @@ public class EmailConfirmationForm extends FormLayout {
     Button close = new Button("Закрыть");
 
 
+    //Конструктор
     public EmailConfirmationForm(){
         addClassName("emailConfirmation-form");
 
@@ -31,6 +33,7 @@ public class EmailConfirmationForm extends FormLayout {
     }
 
 
+    //Конфигурация кнопок и создание компонента
     private Component createButtonsLayout() {
         send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -46,14 +49,19 @@ public class EmailConfirmationForm extends FormLayout {
     }
 
 
+    //Конфигурация валидатора
     private void configureBinder() {
         binder.bindInstanceFields(this);
         setBinder(new EmailCodeRequest());
     }
 
+
+    //Установка значения валидатора
     public void setBinder(EmailCodeRequest dto) {
         binder.setBean(dto);
     }
+
+
 
     public static abstract class EmailConfirmationFormEvent extends ComponentEvent<EmailConfirmationForm> {
         private EmailCodeRequest dto;

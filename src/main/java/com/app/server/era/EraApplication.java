@@ -21,9 +21,12 @@ public class EraApplication {
         return new ModelMapper();
     }
 
+    //Создание бина
     @Bean
     public JavaMailSender getJavaMailSender() {
+        //Создание реализованного отправителя сообщений
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        //Настройка параметров
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 

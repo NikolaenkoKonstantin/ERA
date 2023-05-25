@@ -17,6 +17,7 @@ import com.vaadin.flow.shared.Registration;
 
 import java.util.List;
 
+//Форма назначения нового врача пациенту
 public class PatientEditDoctorForm extends FormLayout {
     ComboBox<Doctor> doctor = new ComboBox<>("Доктор");
     Binder<PatientEditDoctorRequest> binder = new BeanValidationBinder<>(PatientEditDoctorRequest.class);
@@ -24,6 +25,7 @@ public class PatientEditDoctorForm extends FormLayout {
     Button close = new Button("Отмена");
 
 
+    //Конструктор
     public PatientEditDoctorForm(PatientEditDoctorRequest request, List<Doctor> doctors){
         addClassName("patientEditDoctor-form");
 
@@ -34,18 +36,21 @@ public class PatientEditDoctorForm extends FormLayout {
     }
 
 
+    //Конфигурация кнопок бокс
     private void configureComboBox(List<Doctor> doctors) {
         doctor.setItems(doctors);
         doctor.setItemLabelGenerator(el -> el.getLastName() + el.getFirstName() + el.getSurName());
     }
 
 
+    //Конфигурация валидатора
     private void configureBinder(PatientEditDoctorRequest request) {
         binder.bindInstanceFields(this);
         setBinder(request);
     }
 
 
+    //Конфигурация кнопок и создание компонента
     private Component createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -61,6 +66,7 @@ public class PatientEditDoctorForm extends FormLayout {
     }
 
 
+    //Проверка валидации
     private void validateAndSave() {
         if(binder.isValid()) {
             fireEvent(new SaveEvent(this, binder.getBean()));
@@ -68,6 +74,7 @@ public class PatientEditDoctorForm extends FormLayout {
     }
 
 
+    //Установка значения валидатору
     public void setBinder(PatientEditDoctorRequest dto) {
         binder.setBean(dto);
     }

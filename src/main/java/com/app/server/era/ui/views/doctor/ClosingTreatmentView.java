@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
+//Представление закрытия лечения
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/doctor/closing", layout = EraLayout.class)
 @PageTitle("Closing treatment| ERA CRM")
@@ -28,6 +29,7 @@ public class ClosingTreatmentView extends VerticalLayout {
     PatientResponseDTO responseDTO;
 
 
+    //Конструктор
     @Autowired
     public ClosingTreatmentView(DoctorService doctorService, Converter converter){
         this.doctorService = doctorService;
@@ -47,11 +49,13 @@ public class ClosingTreatmentView extends VerticalLayout {
     }
 
 
+    //Преобразователь данных с помощью конвертера
     private void convertData() {
         closeDTO = converter.convertToClosingTreatmentRequest(responseDTO);
     }
 
 
+    //Конфигурация формы
     private void configureForm() {
         form = new ClosingTreatmentForm();
 
@@ -63,20 +67,23 @@ public class ClosingTreatmentView extends VerticalLayout {
     }
 
 
+    //Закрытия формы
     private void closeForm(ClosingTreatmentForm.CloseEvent event) {
         form.setBinder(null);
         navigateToPatient(responseDTO);
     }
 
 
+    //Закрытие лечения
     private void closeTreatment(ClosingTreatmentForm.CloseTreatmentEvent event) {
         navigateToPatient(converter.convertToResponsePatientDTO(
                 doctorService.closeTreatment(event.getCloseTreatmentRequest())));
     }
 
 
+    //Переход на страницу пациента
     private void navigateToPatient(PatientResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
-        getUI().get().navigate("/doctor/patient");
+        getUI().get().navigate(PatientView.class);
     }
 }

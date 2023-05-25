@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+//Сервис безопасности
 @Service
 @RequiredArgsConstructor
 public class SecurityService implements UserDetailsService {

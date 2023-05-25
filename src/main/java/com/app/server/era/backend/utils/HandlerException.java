@@ -5,15 +5,16 @@ import com.app.server.era.backend.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+//Обработчик исключений, создание ответов в виде ошибок
 public class HandlerException {
-    public ResponseEntity<AuthorizedError> handleException(AuthorizedException ex){
-        AuthorizedError response = new AuthorizedError(ex.getMessage());
+    public ResponseEntity<AuthenticationError> handleException(AuthenticationException ex){
+        AuthenticationError response = new AuthenticationError(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
 
-    public ResponseEntity<AuthorizedError> handleException(AuthorizedBadRequestException ex){
-        AuthorizedError response = new AuthorizedError(ex.getMessage());
+    public ResponseEntity<AuthenticationError> handleException(AuthenticationBadRequestException ex){
+        AuthenticationError response = new AuthenticationError(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
