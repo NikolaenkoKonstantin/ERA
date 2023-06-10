@@ -31,8 +31,7 @@ public class RestController {
             BindingResult bindingResult){
         validator.loginUserValidation(bindingResult);
 
-        return ResponseEntity.ok(
-                converter.convertToLoginResponseUserDTO(
+        return ResponseEntity.ok(converter.convertToLoginResponseUserDTO(
                         androidService.login(dto)));
     }
 

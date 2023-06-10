@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 //Сервис отправки сообщений
@@ -15,6 +16,7 @@ public class EraEmailService {
     //Стандартный класс отправитель JavaMailSender
     private final JavaMailSender mailSender;
 
+    @Async
     //Метод собственного сервиса
     public void send(String emailTo, String subject, String message) {
         //Создается объект простого сообщения
@@ -51,5 +53,4 @@ public class EraEmailService {
 
         return code;
     }
-
 }

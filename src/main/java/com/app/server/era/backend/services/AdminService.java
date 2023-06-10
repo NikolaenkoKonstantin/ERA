@@ -25,7 +25,8 @@ public class AdminService {
 
 
     //Получение всех докторов по фамилии
-    public List<Doctor> findAllDoctorsByLastName(String stringFilter){
+    public List<Doctor> findAllDoctorsByLastName(
+            String stringFilter){
         if (stringFilter == null || stringFilter.isEmpty()) {
             return doctorRepo.findAll();
         } else {
@@ -46,8 +47,10 @@ public class AdminService {
     //Изменение пароля доктора (админом)
     @Transactional
     public void EditPassword(PasswordEditRequest request){
-        User user = doctorRepo.findById(request.getId()).get().getUser();
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        User user = doctorRepo
+                .findById(request.getId()).get().getUser();
+        user.setPassword(
+                passwordEncoder.encode(request.getPassword()));
         userRepo.save(user);
     }
 
@@ -81,7 +84,8 @@ public class AdminService {
     //Изменение данных доктора (админом)
     @Transactional
     public Doctor updateDoctor(Doctor updateDoctor){
-        Doctor doctor = doctorRepo.findById(updateDoctor.getId()).get();
+        Doctor doctor =
+                doctorRepo.findById(updateDoctor.getId()).get();
 
         doctor.setLastName(updateDoctor.getLastName());
         doctor.setFirstName(updateDoctor.getFirstName());
@@ -89,6 +93,4 @@ public class AdminService {
 
         return doctorRepo.save(doctor);
     }
-
-
 }

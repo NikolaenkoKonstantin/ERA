@@ -17,7 +17,6 @@ import jakarta.annotation.security.RolesAllowed;
 public class PatientCreateView extends VerticalLayout {
     PatientCreateForm form;
 
-
     //Конструктор
     public PatientCreateView(){
         addClassName("patientCreate-view");
@@ -26,7 +25,6 @@ public class PatientCreateView extends VerticalLayout {
 
         add(form);
     }
-
 
     //Конфигурация формы
     private void configureForm() {
@@ -37,13 +35,11 @@ public class PatientCreateView extends VerticalLayout {
         form.addCloseListener(event -> navigateToPatients());
     }
 
-
     //Переход на представление пациентов
     private void navigateToPatients() {
         form.setBinder(null);
         getUI().get().navigate("/doctor/patients");
     }
-
 
     //Переход на представление подтверждения почты
     private void navigateToEmailConfirmation(

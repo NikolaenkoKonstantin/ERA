@@ -30,12 +30,10 @@ public class AuthProviderImpl implements AuthenticationProvider {
             Authentication authentication)
             throws AuthenticationException {
         //Поиск аккаунта пользователя
-        UserDetails userDetails =
-                securityService.loadUserByUsername(
+        UserDetails userDetails = securityService.loadUserByUsername(
                         authentication.getName());
 
-        String password =
-                authentication.getCredentials().toString();
+        String password = authentication.getCredentials().toString();
 
         //Проверка пароля
         if (!passwordEncoder.matches(
@@ -44,8 +42,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
                     "Incorrect password");
         }
         //Проверка аккаунта на активность (заблокирован или нет)
-        else if(!((UserDetailsImpl) userDetails)
-                .getUser().isActive()){
+        else if(!((UserDetailsImpl) userDetails).getUser().isActive()){
             throw new BadCredentialsException(
                     "account is frozen");
         }

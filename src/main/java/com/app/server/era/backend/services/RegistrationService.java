@@ -16,7 +16,6 @@ public class RegistrationService {
     //Шифратор
     private final PasswordEncoder passwordEncoder;
 
-
     //Зарегистрировать пациента
     @Transactional
     public User registratePatient(User user) {
@@ -27,7 +26,6 @@ public class RegistrationService {
                 passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
-
 
     //Зарегистрировать врача
     @Transactional

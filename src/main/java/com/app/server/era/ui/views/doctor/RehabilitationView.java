@@ -30,7 +30,7 @@ import static com.vaadin.flow.component.UI.getCurrent;
 @PageTitle("rehabilitation | ERA CRM")
 public class RehabilitationView extends VerticalLayout {
     private final DoctorService doctorService;
-    final Chart chartAngle = new Chart();
+    Chart chartAngle = new Chart();
     Chart chartCountBendAndState = new Chart();
     Button close = new Button("Вернуться к пациенту");
 
@@ -40,6 +40,7 @@ public class RehabilitationView extends VerticalLayout {
     DataSeries dsCountBend = new DataSeries();
     DataSeries dsState = new DataSeries();
 
+    //Данные для работы
     List<Dimension> dtoCharts;
     PatientResponseDTO patDTO;
     ScheduleRequest scheduleRequest;
@@ -51,8 +52,10 @@ public class RehabilitationView extends VerticalLayout {
         this.doctorService = doctorService;
         addClassName("rehabilitation-view");
 
-        patDTO = ComponentUtil.getData(getCurrent(), PatientResponseDTO.class);
-        scheduleRequest = ComponentUtil.getData(getCurrent(), ScheduleRequest.class);
+        patDTO = ComponentUtil.getData(getCurrent(),
+                PatientResponseDTO.class);
+        scheduleRequest = ComponentUtil.getData(getCurrent(),
+                ScheduleRequest.class);
 
         System.out.println(patDTO);
         System.out.println(scheduleRequest);
@@ -64,9 +67,11 @@ public class RehabilitationView extends VerticalLayout {
             configureButton();
             rebootCharts();
 
-            add(close, new H3("Реабилитация"), chartAngle, chartCountBendAndState);
+            add(close, new H3("Реабилитация"),
+                    chartAngle, chartCountBendAndState);
         }else{
-            add(new H3("Не выбран пациент для отображения графика лечения"));
+            add(new H3("Не выбран пациент для" +
+                    " отображения графика лечения"));
         }
     }
 
@@ -80,7 +85,8 @@ public class RehabilitationView extends VerticalLayout {
 
     //Переход на страницу пациента
     private void navigateToPatient() {
-        ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, patDTO);
+        ComponentUtil.setData(UI.getCurrent(),
+                PatientResponseDTO.class, patDTO);
         getUI().get().navigate(PatientView.class);
     }
 
@@ -105,16 +111,24 @@ public class RehabilitationView extends VerticalLayout {
 
     //Задать значения данными графиков
     private void updateData(){
-        Number[] numbersFlexionAngle = new Double[dtoCharts.size()];
-        Number[] numbersExtensionAngle = new Double[dtoCharts.size()];
-        Number[] numbersCountBend = new Integer[dtoCharts.size()];
-        Number[] numbersState = new Integer[dtoCharts.size()];
+        Number[] numbersFlexionAngle =
+                new Double[dtoCharts.size()];
+        Number[] numbersExtensionAngle =
+                new Double[dtoCharts.size()];
+        Number[] numbersCountBend =
+                new Integer[dtoCharts.size()];
+        Number[] numbersState =
+                new Integer[dtoCharts.size()];
 
         for (int i = 0; i < dtoCharts.size(); i++){
-            numbersFlexionAngle[i] = dtoCharts.get(i).getFlexionAngle();
-            numbersExtensionAngle[i] = dtoCharts.get(i).getExtensionAngle();
-            numbersCountBend[i] = dtoCharts.get(i).getCountBend();
-            numbersState[i] = dtoCharts.get(i).getState();
+            numbersFlexionAngle[i] =
+                    dtoCharts.get(i).getFlexionAngle();
+            numbersExtensionAngle[i] =
+                    dtoCharts.get(i).getExtensionAngle();
+            numbersCountBend[i] =
+                    dtoCharts.get(i).getCountBend();
+            numbersState[i] =
+                    dtoCharts.get(i).getState();
         }
 
         dsFlexionAngle.setData(numbersFlexionAngle);
@@ -143,9 +157,11 @@ public class RehabilitationView extends VerticalLayout {
 
     //Конфигурация второго графика (количества и боли)
     private void configureChartCountBendAndState() {
-        Configuration configuration = chartCountBendAndState.getConfiguration();
+        Configuration configuration =
+                chartCountBendAndState.getConfiguration();
 
-        configureLegend(configuration, "Количество сгибаний/оценка боли в суставе",
+        configureLegend(configuration,
+                "Количество сгибаний/оценка боли в суставе",
                 "Количество сгибаний/значение боли");
 
         configuration.addSeries(dsCountBend);
@@ -157,9 +173,11 @@ public class RehabilitationView extends VerticalLayout {
 
     //Конфигурация первого графика (углов)
     public void configureChartAngle(){
-        Configuration configuration = chartAngle.getConfiguration();
+        Configuration configuration =
+                chartAngle.getConfiguration();
 
-        configureLegend(configuration, "Угол сгибания/разгибания", "Угол в градусах");
+        configureLegend(configuration,
+                "Угол сгибания/разгибания", "Угол в градусах");
 
         configuration.addSeries(dsFlexionAngle);
         configuration.addSeries(dsExtensionAngle);
@@ -169,7 +187,8 @@ public class RehabilitationView extends VerticalLayout {
 
 
     //Общая конфигурация графиков
-    private void configureLegend(Configuration configuration, String title, String titleY){
+    private void configureLegend(Configuration configuration,
+                                 String title, String titleY){
         configuration.setTitle(title);
         configuration.getyAxis().setTitle(titleY);
 

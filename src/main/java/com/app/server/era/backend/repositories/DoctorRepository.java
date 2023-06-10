@@ -1,7 +1,6 @@
 package com.app.server.era.backend.repositories;
 
 import com.app.server.era.backend.models.Doctor;
-import com.app.server.era.backend.models.Patient;
 import com.app.server.era.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

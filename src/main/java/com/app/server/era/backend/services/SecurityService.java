@@ -15,24 +15,29 @@ import java.util.Optional;
 //Сервис безопасности
 @Service
 @RequiredArgsConstructor
-public class SecurityService implements UserDetailsService {
+public class SecurityService
+        implements UserDetailsService {
     private final UserRepository userRepo;
-    private final AuthenticationContext authenticationContext;
+    private final AuthenticationContext authContext;
 
 
     //проверка на существование аккаунта
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepo.findByLogin(username);
+    public UserDetails loadUserByUsername(
+            String username)
+            throws UsernameNotFoundException {
+        Optional<User> user =
+                userRepo.findByLogin(username);
 
         if (user.isEmpty())
-            throw new UsernameNotFoundException("User not found!");
+            throw new UsernameNotFoundException(
+                    "User not found!");
 
         return new UserDetailsImpl(user.get());
     }
 
 
     public void logout(){
-        authenticationContext.logout();
+        authContext.logout();
     }
 }
