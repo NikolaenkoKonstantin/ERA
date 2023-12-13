@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
-//Представление редактирования пациента
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/doctor/update", layout = EraLayout.class)
 @PageTitle("Update patient | ERA CRM")
@@ -29,7 +28,6 @@ public class PatientUpdateView extends VerticalLayout {
     PatientResponseDTO responseDTO;
 
 
-    //Конструктор
     @Autowired
     public PatientUpdateView(Converter converter, DoctorService webService){
         this.converter = converter;
@@ -50,13 +48,11 @@ public class PatientUpdateView extends VerticalLayout {
     }
 
 
-    //Преобразоваине в нужные данные с помощью конвертера
     private void convertData() {
         updateDTO = converter.convertToPatientRequestUpdateDTO(responseDTO);
     }
 
 
-    //Конфигурация формы
     private void configureForm(PatientRequestUpdateDTO editPatient) {
         form = new PatientUpdateForm(editPatient);
 
@@ -66,21 +62,18 @@ public class PatientUpdateView extends VerticalLayout {
     }
 
 
-    //Закрытие формы
     private void closeForm(PatientUpdateForm.CloseEvent closeEvent) {
         form.setBinder(null);
         navigateToPatient(responseDTO);
     }
 
 
-    //Сохранение изменений данных пациента
     private void savePatient(PatientUpdateForm.SaveEvent event) {
         navigateToPatient(converter.convertToResponsePatientDTO(doctorService.updatePatient(
                 converter.convertToPatient(event.getPatientRequestUpdateDTO()))));
     }
 
 
-    //Переход на страницу пациента
     private void navigateToPatient(PatientResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientView.class);

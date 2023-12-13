@@ -14,7 +14,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-//Форма редактирования врача
 public class DoctorUpdateForm extends FormLayout {
     private TextField lastName = new TextField("Фамилия");
     private TextField firstName = new TextField("Имя");
@@ -24,7 +23,6 @@ public class DoctorUpdateForm extends FormLayout {
     Button close = new Button("Отмена");
 
 
-    //Конструктор
     public DoctorUpdateForm(DoctorRequestUpdateDTO dto){
         addClassName("doctorUpdate-form");
 
@@ -34,14 +32,12 @@ public class DoctorUpdateForm extends FormLayout {
     }
 
 
-    //Конфигурация валидатора
     private void configureBinder(DoctorRequestUpdateDTO dto) {
         binder.bindInstanceFields(this);
         setBinder(dto);
     }
 
 
-    //Конфигурация кнопок и создание компонента
     private Component createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -64,7 +60,6 @@ public class DoctorUpdateForm extends FormLayout {
     }
 
 
-    //Установка значения валидатору
     public void setBinder(DoctorRequestUpdateDTO dto) {
         binder.setBean(dto);
     }

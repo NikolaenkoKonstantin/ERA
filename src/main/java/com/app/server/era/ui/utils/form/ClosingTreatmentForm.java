@@ -17,7 +17,6 @@ import com.vaadin.flow.shared.Registration;
 import java.util.List;
 
 
-//Форма закрытия лечения
 public class ClosingTreatmentForm extends FormLayout {
     ComboBox<String> elbowKnee = new ComboBox<>("Сустав");
     ComboBox<String> leftRight = new ComboBox<>("Ориентация");
@@ -25,7 +24,6 @@ public class ClosingTreatmentForm extends FormLayout {
     Button close = new Button("Отмена");
     Binder<CloseTreatmentRequest> binder = new BeanValidationBinder<>(CloseTreatmentRequest.class);
 
-    //Конструктор
     public ClosingTreatmentForm() {
         addClassName("closingTreatment-form");
 
@@ -36,21 +34,18 @@ public class ClosingTreatmentForm extends FormLayout {
     }
 
 
-    //Конфигурация валидатора
     private void configureBinder(){
         binder.bindInstanceFields(this);
         setBinder(new CloseTreatmentRequest());
     }
 
 
-    //Конфигурая кнопки бокса
     private void configureComboBox(){
         elbowKnee.setItems(List.of("Локтевой", "Коленный"));
         leftRight.setItems(List.of("Левая", "Правая"));
     }
 
 
-    //Конфигурация кнопок и создание компонента
     private Component createButtonsLayout() {
         closeTreatment.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -67,7 +62,6 @@ public class ClosingTreatmentForm extends FormLayout {
     }
 
 
-    //Проверка валидации
     private void validateAndSave() {
         if(binder.isValid()) {
             fireEvent(new ClosingTreatmentForm.CloseTreatmentEvent(this, binder.getBean()));
@@ -75,7 +69,6 @@ public class ClosingTreatmentForm extends FormLayout {
     }
 
 
-    //Установка значения для валидатора
     public void setBinder(CloseTreatmentRequest dto) {
         binder.setBean(dto);
     }

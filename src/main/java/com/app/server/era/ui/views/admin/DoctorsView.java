@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-//Представление врачей
 @RolesAllowed("ROLE_ADMIN")
 @Route(value = "/admin/doctors", layout = EraLayout.class)
 @PageTitle("Doctors | ERA CRM")
@@ -31,7 +30,6 @@ public class DoctorsView extends VerticalLayout {
     TextField filterText = new TextField();
 
 
-    //Конструктор
     @Autowired
     public DoctorsView(Converter converter, AdminService adminService){
         this.converter = converter;
@@ -46,7 +44,6 @@ public class DoctorsView extends VerticalLayout {
     }
 
 
-    //Конфигурация полей, кнопок и создание toolbar компонента
     private Component getToolbar() {
         filterText.setPlaceholder("Фильтр...");
         filterText.setClearButtonVisible(true);
@@ -63,7 +60,6 @@ public class DoctorsView extends VerticalLayout {
     }
 
 
-    //Конфигурация сетки (таблицы)
     private void configureGrid() {
         grid.addClassNames("doctor-grid");
         grid.setSizeFull();
@@ -75,7 +71,6 @@ public class DoctorsView extends VerticalLayout {
     }
 
 
-    //Конфигурация полей сетки
     private void configureColumns() {
         grid.removeAllColumns();
         grid.addColumn(DoctorResponseDTO::getLastName).setHeader("Фамилия");
@@ -85,14 +80,12 @@ public class DoctorsView extends VerticalLayout {
     }
 
 
-    //Переход на страницу врача
     private void navigateToDoctor(DoctorResponseDTO dto) {
         ComponentUtil.setData(UI.getCurrent(), DoctorResponseDTO.class, dto);
         getUI().get().navigate(DoctorView.class);
     }
 
 
-    //Загрузка данных сетки
     private List<DoctorResponseDTO> loadGrid(){
         return adminService.findAllDoctorsByLastName(filterText.getValue())
                 .stream()

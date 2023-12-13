@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
-//Предстевление отправки сообщения
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/doctor/message", layout = EraLayout.class)
 @PageTitle("Send message | ERA CRM")
@@ -30,7 +29,6 @@ public class SendMessageEmailView extends VerticalLayout {
     PatientResponseDTO responseDTO;
 
 
-    //Конструктор
     @Autowired
     public SendMessageEmailView(EraEmailService eraEmailService, Converter converter, DoctorService webService){
         this.eraEmailService = eraEmailService;
@@ -52,13 +50,11 @@ public class SendMessageEmailView extends VerticalLayout {
     }
 
 
-    //Получить сообщение
     private void getMessageSendRequest(){
         sendMessage = converter.convertToMessageSendRequest(doctorService.getEmailPatient(responseDTO.getId()));
     }
 
 
-    //конфигурация формы
     private void configureForm() {
         form = new SendMessageEmailForm(sendMessage);
 
@@ -68,29 +64,21 @@ public class SendMessageEmailView extends VerticalLayout {
     }
 
 
-    //Закрытие формы
     private void closeForm(SendMessageEmailForm.CloseEvent closeEvent) {
         navigateToPatient(responseDTO);
     }
 
 
-    //Вызов метода сервиса для отправки сообщения
     private void sendMessage(
             SendMessageEmailForm.SendEvent sendEvent) {
-        //Получить сообщение из объекта sendEvent
-        MessageSendRequest message =
-                sendEvent.getMessageSendRequest();
+        MessageSendRequest message = sendEvent.getMessageSendRequest();
 
-        //Вызов метода собственного сервиса сообщений
-        eraEmailService.send(
-                message.getEmail(), "email", message.getMessage());
+        eraEmailService.send(message.getEmail(), "email", message.getMessage());
 
-        //Переход на другое представление
         navigateToPatient(responseDTO);
     }
 
 
-    //Переход на страницу пациента
     private void navigateToPatient(PatientResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientView.class);

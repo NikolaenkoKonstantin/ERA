@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
-//представление измерения пароля врача
 @RolesAllowed("ROLE_ADMIN")
 @Route(value = "/admin/password", layout = EraLayout.class)
 @PageTitle("Edit password | ERA CRM")
@@ -29,7 +28,6 @@ public class DoctorPasswordEditView extends VerticalLayout {
     PasswordEditRequest editPassword;
 
 
-    //Конструктор
     @Autowired
     public DoctorPasswordEditView(Converter converter, AdminService adminService){
         this.converter = converter;
@@ -50,13 +48,11 @@ public class DoctorPasswordEditView extends VerticalLayout {
     }
 
 
-    //Преобразование в нужные данные (вызор конвертора)
     private void convertData() {
         editPassword = converter.convertToPasswordEditRequest(responseDTO);
     }
 
 
-    //Конфигурация формы
     private void configureForm(PasswordEditRequest request) {
         form = new PasswordEditForm(request);
 
@@ -66,14 +62,12 @@ public class DoctorPasswordEditView extends VerticalLayout {
     }
 
 
-    //Сохрание нового пароля
     private void savePassword(PasswordEditForm.SaveEvent event) {
         adminService.EditPassword(event.getPasswordEditRequest());
         navigateToDoctor();
     }
 
 
-    //Переход на страницу врача
     private void navigateToDoctor(){
         ComponentUtil.setData(UI.getCurrent(), DoctorResponseDTO.class, responseDTO);
         getUI().get().navigate(DoctorView.class);

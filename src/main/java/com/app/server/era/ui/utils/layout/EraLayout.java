@@ -21,13 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
-//Макет для представлений
 public class EraLayout extends AppLayout {
-    //Сервис безопасности
     private final SecurityService securityService;
 
 
-    //Конструктор с внедрением зависимости
     @Autowired
     public EraLayout(SecurityService securityService) {
         this.securityService = securityService;
@@ -35,24 +32,18 @@ public class EraLayout extends AppLayout {
         createDrawer();
     }
 
-    //Создание шапки макета
     private void createHeader() {
-        //Название макета
         H1 logo = new H1("ERA | Vaadin CRM");
-        //Настройка названия
         logo.addClassNames(
                 LumoUtility.FontSize.LARGE,
                 LumoUtility.Margin.MEDIUM);
 
-        //Добавить действие для кнопки выхода
         Button logout = new Button("Log out",
                 e -> securityService.logout());
 
-        //Получение горизонтальной расстановки
         var header = new HorizontalLayout(new DrawerToggle(),
                 logo, logout);
 
-        //Настройка шапки
         header.setDefaultVerticalComponentAlignment(
                 FlexComponent.Alignment.CENTER);
         header.expand(logo);
@@ -61,20 +52,15 @@ public class EraLayout extends AppLayout {
                 LumoUtility.Padding.Vertical.NONE,
                 LumoUtility.Padding.Horizontal.MEDIUM);
 
-        //Кладем шапку в Navbar
         addToNavbar(header);
     }
 
 
-    //Создание ящика со ссылками
     private void createDrawer() {
-        //Получение объекта принципал
-        // для определения роли пользователя
         User user = ((UserDetailsImpl) SecurityContextHolder
                 .getContext().getAuthentication()
                 .getPrincipal()).getUser();
 
-        //Если доктор, то такие ссылки
         if(user.getRole().equals("ROLE_DOCTOR")) {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Пациенты",
@@ -85,7 +71,6 @@ public class EraLayout extends AppLayout {
                             NotificationsView.class)
             ));
         }
-        //Иначе если администратор то такие ссылки
         else if(user.getRole().equals("ROLE_ADMIN")){
             addToDrawer(new VerticalLayout(
                     new RouterLink("Доктора",

@@ -17,33 +17,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-//Класс конфигурации SpringSecurity
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends VaadinWebSecurity{
 
-    //Конфигурация http
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        //Установка представления входа
         setLoginView(http, LoginView.class);
     }
 
 
-    //Конфигурация web
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
 
-        //Игнорирование данных url-адресов (они не защищены)
         web.ignoring().requestMatchers(HttpMethod.GET, "/android/login");
+        //web.ignoring().requestMatchers(HttpMethod.GET, "/pdf/generate");
         web.ignoring().requestMatchers(HttpMethod.POST, "/android/dimension");
     }
 
 
-    //Конфигурация аутентификации
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity,
                                                        AuthProviderImpl authProvider,
@@ -54,7 +49,6 @@ public class SecurityConfig extends VaadinWebSecurity{
     }
 
 
-    //Бин шифратора
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

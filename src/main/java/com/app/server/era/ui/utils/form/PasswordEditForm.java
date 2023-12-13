@@ -14,7 +14,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-//Форма Изменения пароля
 public class PasswordEditForm extends FormLayout {
     private TextField password = new TextField("Пароль");
     Binder<PasswordEditRequest> binder = new BeanValidationBinder<>(PasswordEditRequest.class);
@@ -22,7 +21,6 @@ public class PasswordEditForm extends FormLayout {
     Button close = new Button("Отмена");
 
 
-    //Конструктор
     public PasswordEditForm(PasswordEditRequest request){
         addClassName("passwordEdit-form");
 
@@ -32,14 +30,12 @@ public class PasswordEditForm extends FormLayout {
     }
 
 
-    //Конфигурация валидатора
     private void configureBinder(PasswordEditRequest request) {
         binder.bindInstanceFields(this);
         setBinder(request);
     }
 
 
-    //Конфигурация кнопок и создание компонента
     private Component createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -55,7 +51,6 @@ public class PasswordEditForm extends FormLayout {
     }
 
 
-    //Проверка валидации
     private void validateAndSave() {
         if(binder.isValid()) {
             fireEvent(new SaveEvent(this, binder.getBean()));
@@ -63,7 +58,6 @@ public class PasswordEditForm extends FormLayout {
     }
 
 
-    //Установка значения валидатору
     public void setBinder(PasswordEditRequest dto) {
         binder.setBean(dto);
     }

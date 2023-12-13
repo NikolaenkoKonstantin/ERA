@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
-//Представление подтверждения почты
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/confirmation", layout = EraLayout.class)
 @PageTitle("Email confirmation | ERA CRM")
@@ -33,7 +32,6 @@ public class EmailConfirmationView extends VerticalLayout {
     PatientRequestCreateDTO dto;
 
 
-    //Конструктор
     @Autowired
     public EmailConfirmationView(DoctorService doctorService, RegistrationService regService,
                                  Converter converter, EraEmailService eraEmailService){
@@ -55,7 +53,6 @@ public class EmailConfirmationView extends VerticalLayout {
     }
 
 
-    //Конфигурация формы
     private void configureForm() {
         form = new EmailConfirmationForm();
 
@@ -65,13 +62,11 @@ public class EmailConfirmationView extends VerticalLayout {
     }
 
 
-    //Закрытие формы
     private void closeForm() {
         getUI().get().navigate(PatientCreateView.class);
     }
 
 
-    //Проверка кода
     private void checkCode(EmailConfirmationForm.SendEvent sendEvent) {
         String codeClient = sendEvent.getEmailCodeRequest().getCode();
 
@@ -83,20 +78,17 @@ public class EmailConfirmationView extends VerticalLayout {
     }
 
 
-    //Сохранение пациента
     private void savePatient() {
         navigateToPatient(converter.convertToResponsePatientDTO(doctorService.createPatient(
                 converter.convertToPatient(dto), regService.registratePatient(converter.convertToUser(dto)))));
     }
 
 
-    //Отправка сообщения с кодом на почту
     private void sendCodeToEmail() {
         codeServer = eraEmailService.sendCodeToEmail(dto.getEmail());
     }
 
 
-    //Переход на страницу пациента
     private void navigateToPatient(PatientResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientView.class);

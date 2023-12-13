@@ -14,7 +14,6 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-//Форма отправки сообщения от врача пациенту
 public class SendMessageEmailForm extends FormLayout {
     TextField message = new TextField("Сообщение");
     Button send = new Button("Отправить");
@@ -22,7 +21,6 @@ public class SendMessageEmailForm extends FormLayout {
     Binder<MessageSendRequest> binder = new BeanValidationBinder<>(MessageSendRequest.class);
 
 
-    //Конструктор
     public SendMessageEmailForm(MessageSendRequest request) {
         addClassName("sendMessage-form");
 
@@ -32,14 +30,12 @@ public class SendMessageEmailForm extends FormLayout {
     }
 
 
-    //Конфигурация валидатора
     private void configureBinder(MessageSendRequest request) {
         binder.bindInstanceFields(this);
         setBinder(request);
     }
 
 
-    //Конфигурация кнопок и создание компонента
     private Component createButtonsLayout() {
         send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -55,7 +51,6 @@ public class SendMessageEmailForm extends FormLayout {
     }
 
 
-    //Проверка валидации
     private void validateAndSave() {
         if(binder.isValid()) {
             fireEvent(new SendEvent(this, binder.getBean()));
@@ -63,7 +58,6 @@ public class SendMessageEmailForm extends FormLayout {
     }
 
 
-    //Установка значения валидатору
     public void setBinder(MessageSendRequest dto) {
         binder.setBean(dto);
     }

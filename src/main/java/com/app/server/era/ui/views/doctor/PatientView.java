@@ -29,7 +29,6 @@ import java.util.List;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
-//Представление пациента
 @RolesAllowed({"ROLE_DOCTOR", "ROLE_ADMIN"})
 @Route(value = "/doctor/patient", layout = EraLayout.class)
 @PageTitle("Patient | ERA CRM")
@@ -46,7 +45,6 @@ public class PatientView extends VerticalLayout{
     List<DimensionResponseDTO> listDim;
 
 
-    //Конструктор
     @Autowired
     public PatientView(DoctorService webService, Converter converter){
         this.doctorService = webService;
@@ -67,7 +65,6 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Конфигурация кнопок
     private Component configureButton() {
         User user = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
@@ -84,28 +81,24 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Переход на страницу назначения нового врача
     private void navigateToEditDoctor(ClickEvent<Button> buttonClickEvent) {
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientEditDoctorView.class);
     }
 
 
-    //Переход на страницу отправки сообщения на почту
     private void sendMessage(ClickEvent<Button> buttonClickEvent) {
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(SendMessageEmailView.class);
     }
 
 
-    //Переход на страницу изменения пароля
     private void navigateToPasswordEdit(ClickEvent<Button> buttonClickEvent) {
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientPasswordEditView.class);
     }
 
 
-    //Переход на страницу закрытия лечения
     private void navigateToClosingTreatment(ClickEvent<Button> buttonClickEvent) {
         ComponentUtil.setData(UI.getCurrent(), CloseTreatmentRequest.class,
                 converter.convertToClosingTreatmentRequest(dto));
@@ -114,7 +107,6 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Конфигурация сетки
     private void configureGrid() {
         configureColumns();
 
@@ -133,7 +125,6 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Переход на страницу реабилитации
     private void navigateToRehabitation(DimensionResponseDTO dimDTO){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         ComponentUtil.setData(UI.getCurrent(), ScheduleRequest.class, converter.convertToScheduleRequest(dimDTO));
@@ -141,7 +132,6 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Конфигурация колонок сетки
     private void configureColumns() {
         grid.removeAllColumns();
         grid.addColumn(DimensionResponseDTO::getLeftRight).setHeader("Ориентация");
@@ -159,7 +149,6 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Загрузка данных сетки
     private List<DimensionResponseDTO> loadGrid() {
         return doctorService.findAllDimensionByPatient(dto.getId())
                 .stream()
@@ -168,7 +157,6 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Конфигурация вывода текста
     private VerticalLayout configurePatient(PatientResponseDTO dto){
         H3 patient = new H3("Пациент: " + dto.getLastName() + " " + dto.getFirstName() + " " + dto.getSurName());
         H3 age = new H3("Возраст: " + dto.getAge());
@@ -178,7 +166,6 @@ public class PatientView extends VerticalLayout{
     }
 
 
-    //Переход на страницу редактирования пациента
     private void navigateToUpdate(ClickEvent<Button> buttonClickEvent){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientUpdateView.class);

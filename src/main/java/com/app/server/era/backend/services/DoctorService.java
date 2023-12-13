@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//Сервис врача
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,44 +25,29 @@ public class DoctorService {
     private final UserRepository userRepo;
 
 
-    //Поиск врачей
-    public List<Dimension> findAllForCharts(
-            int idPatient, String elbowKnee, String leftRight){
+    public List<Dimension> findAllForCharts(int idPatient, String elbowKnee, String leftRight){
         Patient owner = patRepo.findById(idPatient).get();
 
-        Dimension dimension = dimRepo
-                .findFirstByOwnerAndElbowKneeAndLeftRightAndStatusOrderByDateTimeDesc(
+        Dimension dimension = dimRepo.findFirstByOwnerAndElbowKneeAndLeftRightAndStatusOrderByDateTimeDesc(
                 owner, elbowKnee, leftRight, "healthy");
 
         if(dimension != null) {
-            return dimRepo
-                    .findAllByOwnerAndElbowKneeAndLeftRightAndDateTimeAfterOrderByDateTime(
-                            owner,
-                            elbowKnee,
-                            leftRight,
-                            dimension.getDateTime());
+            return dimRepo.findAllByOwnerAndElbowKneeAndLeftRightAndDateTimeAfterOrderByDateTime(
+                    owner, elbowKnee, leftRight, dimension.getDateTime());
         } else {
-            return dimRepo
-                    .findAllByOwnerAndElbowKneeAndLeftRightOrderByDateTime(
-                            owner, elbowKnee, leftRight);
+            return dimRepo.findAllByOwnerAndElbowKneeAndLeftRightOrderByDateTime(owner, elbowKnee, leftRight);
         }
     }
 
 
-    //Закрыть лечение пациента
     @Transactional
     public Patient closeTreatment(CloseTreatmentRequest c){
         Patient patient = patRepo.findById(c.getId()).get();
 
-        Dimension dimension = dimRepo
-                .findFirstByOwnerAndElbowKneeAndLeftRightOrderByDateTimeDesc(
+        Dimension dimension = dimRepo.findFirstByOwnerAndElbowKneeAndLeftRightOrderByDateTimeDesc(
                 patient,
-                c.getElbowKnee()
-                        .equalsIgnoreCase("Локтевой")
-                        ? "elbow" : "knee",
-                c.getLeftRight()
-                        .equalsIgnoreCase("Левая")
-                        ? "left" : "right");
+                c.getElbowKnee().equalsIgnoreCase("Локтевой") ? "elbow" : "knee",
+                c.getLeftRight().equalsIgnoreCase("Левая") ? "left" : "right");
 
         dimension.setStatus("healthy");
         dimRepo.save(dimension);
@@ -72,49 +56,35 @@ public class DoctorService {
     }
 
 
-    //Получить почту пациента
     public String getEmailPatient(int id){
-        return patRepo.findById(id)
-                .get().getUser().getLogin();
+        return patRepo.findById(id).get().getUser().getLogin();
     }
 
 
-    //Удалить уведомление
     @Transactional
     public void deleteNotification(int id){
         notRepo.deleteById(id);
     }
 
 
-    //Изменить пароль пациента (врачом)
     @Transactional
     public void EditPassword(PasswordEditRequest request){
-        User user = patRepo
-                .findById(request.getId()).get().getUser();
-        user.setPassword(
-                passwordEncoder
-                        .encode(request.getPassword()));
+        User user = patRepo.findById(request.getId()).get().getUser();
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepo.save(user);
     }
 
 
-    //Создать пациента (врачом)
     @Transactional
     public Patient createPatient(Patient patient, User user){
-        User userDoctor =
-                ((UserDetailsImpl) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal()).getUser();
+        User userDoctor = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
-        patient.setDoctor(doctorRepo
-                .findByUser(userDoctor));
+        patient.setDoctor(doctorRepo.findByUser(userDoctor));
         patient.setUser(user);
         return patRepo.save(patient);
     }
 
 
-    //Получить доктора по юзеру
     public Doctor findDoctorByUser(User user){
         return doctorRepo.findByUser(user);
     }
@@ -125,7 +95,6 @@ public class DoctorService {
     }
 
 
-    //Получить всех пациентов доктора либо ещё отфильтрованных
     public List<Patient> findAllPatientsByDoctor(
             String stringFilter, Doctor doctor) {
         if (stringFilter == null
@@ -137,19 +106,14 @@ public class DoctorService {
     }
 
 
-    //Получить все измерения пациента
-    public List<Dimension> findAllDimensionByPatient(
-            int idPatient){
-        return dimRepo.findAllByOwner(
-                patRepo.findById(idPatient).get());
+    public List<Dimension> findAllDimensionByPatient(int idPatient){
+        return dimRepo.findAllByOwner(patRepo.findById(idPatient).get());
     }
 
 
-    //Изменить данные пациента (врачом)
     @Transactional
     public Patient updatePatient(Patient updatePatient){
-        Patient patient = patRepo
-                .findById(updatePatient.getId()).get();
+        Patient patient = patRepo.findById(updatePatient.getId()).get();
 
         patient.setLastName(updatePatient.getLastName());
         patient.setFirstName(updatePatient.getFirstName());
@@ -161,18 +125,12 @@ public class DoctorService {
     }
 
 
-    //получить все уведомления врача
-    public List<Notification> findAllNotificationByDoctor(
-            Doctor doctor){
-        //добавить поиск по конкретному доктору
+    public List<Notification> findAllNotificationByDoctor(Doctor doctor){
         return notRepo.findAllByDoctor(doctor);
     }
 
 
-    //получить пациента по номеру карты
-    public Patient findPatientByCardNumber(
-            String cardNumber){
-        return patRepo
-                .findPatientByCardNumber(cardNumber);
+    public Patient findPatientByCardNumber(String cardNumber){
+        return patRepo.findPatientByCardNumber(cardNumber);
     }
 }

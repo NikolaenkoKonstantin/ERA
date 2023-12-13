@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//Сервис администратора
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,9 +23,7 @@ public class AdminService {
     private final DoctorRepository doctorRepo;
 
 
-    //Получение всех докторов по фамилии
-    public List<Doctor> findAllDoctorsByLastName(
-            String stringFilter){
+    public List<Doctor> findAllDoctorsByLastName(String stringFilter){
         if (stringFilter == null || stringFilter.isEmpty()) {
             return doctorRepo.findAll();
         } else {
@@ -35,7 +32,6 @@ public class AdminService {
     }
 
 
-    //Смена доктора у пациента (админом)
     @Transactional
     public void patientEditDoctor(PatientEditDoctorRequest dto){
         Patient patient = patRepo.findById(dto.getId()).get();
@@ -44,18 +40,14 @@ public class AdminService {
     }
 
 
-    //Изменение пароля доктора (админом)
     @Transactional
     public void EditPassword(PasswordEditRequest request){
-        User user = doctorRepo
-                .findById(request.getId()).get().getUser();
-        user.setPassword(
-                passwordEncoder.encode(request.getPassword()));
+        User user = doctorRepo.findById(request.getId()).get().getUser();
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepo.save(user);
     }
 
 
-    //Блокировка аккаунта доктора (админом)
     @Transactional
     public void blockDoctor(int id){
         User user = doctorRepo.findById(id).get().getUser();
@@ -64,7 +56,6 @@ public class AdminService {
     }
 
 
-    //Разблокировка аккаунта доктора (админом)
     @Transactional
     public void unlockDoctor(int id){
         User user = doctorRepo.findById(id).get().getUser();
@@ -73,7 +64,6 @@ public class AdminService {
     }
 
 
-    //Создание аккаунта доктора (админом)
     @Transactional
     public Doctor createDoctor(Doctor doctor, User user){
         doctor.setUser(user);
@@ -81,7 +71,6 @@ public class AdminService {
     }
 
 
-    //Изменение данных доктора (админом)
     @Transactional
     public Doctor updateDoctor(Doctor updateDoctor){
         Doctor doctor =

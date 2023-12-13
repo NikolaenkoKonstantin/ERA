@@ -25,7 +25,6 @@ import java.util.List;
 
 import static com.vaadin.flow.component.UI.getCurrent;
 
-//Представление врача
 @RolesAllowed("ROLE_ADMIN")
 @Route(value = "/admin/doctor", layout = EraLayout.class)
 @PageTitle("Doctor | ERA CRM")
@@ -43,7 +42,6 @@ public class DoctorView extends VerticalLayout {
     TextField filterText = new TextField();
 
 
-    //Конструктор
     @Autowired
     public DoctorView(DoctorService doctorService, Converter converter, AdminService adminService){
         this.doctorService = doctorService;
@@ -67,7 +65,6 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Конфигурация фильтра
     private void configureFilter(){
         filterText.setPlaceholder("Фильтр...");
         filterText.setClearButtonVisible(true);
@@ -76,7 +73,6 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Конфигурация кнопок
     private void configureButtons() {
         editDoctor.addClickListener(e -> navigateToUpdate());
         editPassword.addClickListener(event -> navigateToPasswordEdit());
@@ -85,7 +81,6 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Загрузка данных сетки
     private List<PatientResponseDTO> loadGrid(){
         return doctorService.findAllPatientsByDoctor(filterText.getValue(), doctorService.findDoctorById(dto.getId()))
                 .stream()
@@ -94,7 +89,6 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Конфигурация сетки
     private void configureGrid() {
         configureColumns();
 
@@ -107,7 +101,6 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Конфигурация колонок сетки
     private void configureColumns() {
         grid.removeAllColumns();
         grid.addColumn(PatientResponseDTO::getLastName).setHeader("Фамилия");
@@ -118,14 +111,12 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Переход на страницу пациента
     private void navigateToPatient(PatientResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientView.class);
     }
 
 
-    //Заблокировать аккаунт врача
     private void blockDoctor() {
         adminService.blockDoctor(dto.getId());
         dto.setActive(false);
@@ -133,7 +124,6 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Разблокировать аккаунт врача
     private void unlockDoctor(){
         adminService.unlockDoctor(dto.getId());
         dto.setActive(true);
@@ -141,7 +131,6 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Конфигурация теста на странице
     private VerticalLayout configureDoctor(){
         H3 doctor = new H3("Доктор ");
         H3 lastName = new H3("Фамилия: " + dto.getLastName());
@@ -153,14 +142,12 @@ public class DoctorView extends VerticalLayout {
     }
 
 
-    //Переход на страницу редактирования
     private void navigateToUpdate(){
         ComponentUtil.setData(UI.getCurrent(), DoctorResponseDTO.class, dto);
         getUI().get().navigate(DoctorUpdateView.class);
     }
 
 
-    //Переход на страницу изменения пароля
     private void navigateToPasswordEdit(){
         ComponentUtil.setData(UI.getCurrent(), DoctorResponseDTO.class, dto);
         getUI().get().navigate(DoctorPasswordEditView.class);

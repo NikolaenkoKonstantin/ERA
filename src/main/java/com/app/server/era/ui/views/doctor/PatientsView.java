@@ -22,7 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
-//Представление пациентов
 @RolesAllowed("ROLE_DOCTOR")
 @Route(value = "/doctor/patients", layout = EraLayout.class)
 @PageTitle("Patients | ERA CRM")
@@ -33,7 +32,6 @@ public class PatientsView extends VerticalLayout {
     TextField filterText = new TextField();
 
 
-    //Конструктор
     @Autowired
     public PatientsView(Converter converter, DoctorService doctorService){
         this.converter = converter;
@@ -48,7 +46,6 @@ public class PatientsView extends VerticalLayout {
     }
 
 
-    //Конфигурация полей, кнопок и создание toolbar компонента
     private Component getToolbar() {
         filterText.setPlaceholder("Фильтр...");
         filterText.setClearButtonVisible(true);
@@ -65,7 +62,6 @@ public class PatientsView extends VerticalLayout {
     }
 
 
-    //Загрузка данных сетки
     private List<PatientResponseDTO> loadGrid(){
         User userDoctor = ((UserDetailsImpl) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getUser();
@@ -77,7 +73,6 @@ public class PatientsView extends VerticalLayout {
     }
 
 
-    //Конфигурация сетки
     private void configureGrid() {
         configureColumns();
 
@@ -90,7 +85,6 @@ public class PatientsView extends VerticalLayout {
     }
 
 
-    //Конфигурация колонок сетки
     private void configureColumns() {
         grid.removeAllColumns();
         grid.addColumn(PatientResponseDTO::getLastName).setHeader("Фамилия");
@@ -101,7 +95,6 @@ public class PatientsView extends VerticalLayout {
     }
 
 
-    //Переход на странциу пациента
     private void navigateToPatient(PatientResponseDTO dto){
         ComponentUtil.setData(UI.getCurrent(), PatientResponseDTO.class, dto);
         getUI().get().navigate(PatientView.class);
